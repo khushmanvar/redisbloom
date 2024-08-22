@@ -15,3 +15,9 @@ func Insert(bf *beans.BloomFilter, item []byte) error {
 	}
 	return nil
 }
+
+func ThreadSafeInsert(tsbf *beans.ThreadSafeBloomFilter, item []byte) {
+    tsbf.Mutex.Lock()
+    defer tsbf.Mutex.Unlock()
+    Insert(tsbf.Filter, item)
+}

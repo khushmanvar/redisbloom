@@ -19,3 +19,9 @@ func Exists(bf *beans.BloomFilter, item []byte) (bool, error) {
 	}
 	return true, nil
 }
+
+func ThreadSafeExists(tsbf *beans.ThreadSafeBloomFilter, item []byte) (bool, error) {
+    tsbf.Mutex.RLock()
+    defer tsbf.Mutex.RUnlock()
+    return Exists(tsbf.Filter, item)
+}

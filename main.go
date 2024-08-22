@@ -1,24 +1,25 @@
 package redisbloom
 
 import (
-	"github.com/go-redis/redis/v8"
+	"redisbloom/lib/core/beans"
+
+ 	"github.com/go-redis/redis"
 )
 
-type BloomFilter struct {
-	redisClient *redis.Client
-	key         string
-	size        uint64
-	hashes      int
-}
-
-func NewBloomFilter(redisAddr, key string, size uint64, hashes int) *BloomFilter {
+func NewBloomFilter(redisAddr, key string, size uint64, hashes int) *beans.BloomFilter {
 	client := redis.NewClient(&redis.Options{
 		Addr: redisAddr,
 	})
-	return &BloomFilter{
-		redisClient: client,
-		key:         key,
-		size:        size,
-		hashes:      hashes,
+	return &beans.BloomFilter{
+		RedisClient: client,
+		Key:         key,
+		Size:        size,
+		Hashes:      hashes,
 	}
+}
+
+func NewThreadSafeBloomFilter(redisAddr, key string, size uint64, hashes int) *beans.ThreadSafeBloomFilter {
+    return &beans.ThreadSafeBloomFilter{
+        Filter: NewBloomFilter(redisAddr, key, size, hashes),
+    }
 }
